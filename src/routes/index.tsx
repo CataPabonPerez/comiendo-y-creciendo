@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import bigotesAsset from "@/assets/bigotes.png.asset.json";
-import sebastianAsset from "@/assets/sebastian.png.asset.json";
+import { useEffect, useMemo, useState } from "react";
+import bigotes from "@/assets/gato-bigotes.png";
+import sebastian from "@/assets/mono-sebastian.png";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -59,10 +60,44 @@ function shuffle<T>(arr: T[]): T[] {
 function Game() {
   const [scene, setScene] = useState<0 | 1 | 2 | 3 | 4>(0);
 
+  const [loading, setLoading] = useState(true);
+
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+
+    let value = 0;
+
+    const timer = setInterval(() => {
+
+      value += 4;
+
+      if (value >= 100) {
+        value = 100;
+        clearInterval(timer);
+
+        setTimeout(() => {
+          setLoading(false);
+        }, 300);
+      }
+
+      setProgress(value);
+
+    }, 100);
+
+    return () => clearInterval(timer);
+
+  }, []);
+
+  if (loading) {
+    return <LoadingScreen progress={progress} />;
+  }
+
   return (
     <main className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,#fff5b8_0%,#ffd6f0_45%,#c8f0ff_100%)] font-[system-ui,'Comic_Sans_MS',sans-serif]">
       <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 py-6">
         <Header scene={scene} onHome={() => setScene(0)} />
+
         <div className="flex-1">
           {scene === 0 && <SceneIntro onStart={() => setScene(1)} />}
           {scene === 1 && <SceneStory onNext={() => setScene(2)} />}
@@ -70,6 +105,7 @@ function Game() {
           {scene === 3 && <SceneHealthy onNext={() => setScene(4)} />}
           {scene === 4 && <SceneEnd onRestart={() => setScene(0)} />}
         </div>
+
       </div>
     </main>
   );
@@ -163,8 +199,8 @@ function SceneIntro({ onStart }: { onStart: () => void }) {
         ¡Ven a jugar con Bigotes y Sebastián descubriendo alimentos saludables!
       </p>
       <div className="flex flex-wrap items-end justify-center gap-4">
-        <Character src={bigotesAsset.url} name="Gato Bigotes" className="h-56 md:h-72" />
-        <Character src={sebastianAsset.url} name="Mono Sebastián" className="h-56 md:h-72" />
+        <Character src={bigotes} name="Gato Bigotes" className="h-56 md:h-72" />
+        <Character src={sebastian} name="Mono Sebastián" className="h-56 md:h-72" />
       </div>
       <BigButton onClick={onStart} color="green">
         ▶ ¡Empezar a jugar!
@@ -198,9 +234,9 @@ function SceneStory({ onNext }: { onNext: () => void }) {
     <section className="grid grid-cols-1 items-center gap-6 md:grid-cols-2">
       <div className="flex justify-center">
         {current.who === "gato" ? (
-          <Character src={bigotesAsset.url} name="Bigotes" className="h-72 md:h-96" />
+          <Character src={bigotes} name="Bigotes" className="h-72 md:h-96" />
         ) : (
-          <Character src={sebastianAsset.url} name="Sebastián" className="h-72 md:h-96" />
+          <Character src={sebastian} name="Sebastián" className="h-72 md:h-96" />
         )}
       </div>
       <div className="flex flex-col items-center gap-6">
@@ -254,7 +290,7 @@ function SceneClassify({ onNext }: { onNext: () => void }) {
       </p>
 
       <div className="flex items-center gap-4">
-        <Character src={sebastianAsset.url} name="Sebastián" className="h-32 md:h-40" />
+        <Character src={sebastian} name="Sebastián" className="h-32 md:h-40" />
         {done ? (
           <div className="rounded-3xl bg-white p-6 text-3xl font-black text-green-600 shadow-xl ring-4 ring-green-300">
             🎉 ¡Terminaste! Aciertos: {score} / {initial.length}
@@ -345,7 +381,7 @@ function SceneHealthy({ onNext }: { onNext: () => void }) {
       </p>
 
       <div className="flex items-center gap-4">
-        <Character src={bigotesAsset.url} name="Bigotes" className="h-32 md:h-40" />
+        <Character src={bigotes} name="Bigotes" className="h-32 md:h-40" />
         {done ? (
           <div className="rounded-3xl bg-white p-6 text-3xl font-black text-green-600 shadow-xl ring-4 ring-green-300">
             🎉 ¡Muy bien! Aciertos: {score} / {mix.length}
@@ -419,11 +455,11 @@ function SceneEnd({ onRestart }: { onRestart: () => void }) {
         a crecer sanos, fuertes y llenos de energía.
       </p>
       <div className="flex flex-wrap items-end justify-center gap-4">
-        <Character src={bigotesAsset.url} name="Bigotes" className="h-56 md:h-72" />
+        <Character src={bigotes} name="Bigotes" className="h-56 md:h-72" />
         <div className="rounded-3xl bg-white p-5 text-xl font-bold text-slate-800 shadow-xl ring-4 ring-yellow-300">
           ¡Comer bien es divertido! 🥗✨
         </div>
-        <Character src={sebastianAsset.url} name="Sebastián" className="h-56 md:h-72" />
+        <Character src={sebastian} name="Sebastián" className="h-56 md:h-72" />
       </div>
       <BigButton onClick={onRestart} color="green">
         🔄 Jugar de nuevo
