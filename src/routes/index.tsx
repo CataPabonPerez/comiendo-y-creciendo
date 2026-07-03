@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import bigotes from "@/assets/gato-bigotes.png";
 import sebastian from "@/assets/mono-sebastian.png";
 import LoadingScreen from "@/components/LoadingScreen";
+import AudioManager from "@/audio/AudioManager";
+import inicioJuegoMusic from "@/assets/music/inicio-juego.mp3";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -73,19 +75,30 @@ function Game() {
       value += 4;
 
       if (value >= 100) {
+
         value = 100;
+
         clearInterval(timer);
 
         setTimeout(() => {
+
           setLoading(false);
+
         }, 300);
+
       }
 
       setProgress(value);
 
     }, 100);
 
-    return () => clearInterval(timer);
+    return () => {
+
+      clearInterval(timer);
+
+      AudioManager.stopMusic();
+
+    };
 
   }, []);
 
@@ -202,7 +215,20 @@ function SceneIntro({ onStart }: { onStart: () => void }) {
         <Character src={bigotes} name="Gato Bigotes" className="h-56 md:h-72" />
         <Character src={sebastian} name="Mono Sebastián" className="h-56 md:h-72" />
       </div>
-      <BigButton onClick={onStart} color="green">
+      <BigButton
+        onClick={() => {
+
+          AudioManager.loadMusic(inicioJuegoMusic);
+
+          AudioManager.setMusicVolume(0.25);
+
+          AudioManager.playMusic();
+
+          onStart();
+
+        }}
+        color="green"
+      >
         ▶ ¡Empezar a jugar!
       </BigButton>
     </section>
