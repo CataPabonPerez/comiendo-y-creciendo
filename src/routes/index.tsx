@@ -153,16 +153,24 @@ function Character({
   src,
   name,
   className = "",
+  animation = "",
 }: {
   src: string;
   name: string;
   className?: string;
+  animation?: "cat" | "monkey" | "";
 }) {
   return (
     <img
       src={src}
       alt={name}
-      className={`drop-shadow-2xl select-none ${className}`}
+      className={`drop-shadow-2xl select-none ${
+      animation === "cat"
+        ? "animate-bigotes"
+        : animation === "monkey"
+        ? "animate-sebastian"
+        : ""
+      } ${className}`}
       draggable={false}
     />
   );
@@ -212,8 +220,19 @@ function SceneIntro({ onStart }: { onStart: () => void }) {
         ¡Ven a jugar con Bigotes y Sebastián descubriendo alimentos saludables!
       </p>
       <div className="flex flex-wrap items-end justify-center gap-4">
-        <Character src={bigotes} name="Gato Bigotes" className="h-56 md:h-72" />
-        <Character src={sebastian} name="Mono Sebastián" className="h-56 md:h-72" />
+        <Character
+          src={bigotes}
+          name="Gato Bigotes"
+          animation="cat"
+          className="h-56 md:h-72"
+        />
+
+        <Character
+          src={sebastian}
+          name="Mono Sebastián"
+          animation="monkey"
+          className="h-56 md:h-72"
+        />
       </div>
       <BigButton
         onClick={() => {

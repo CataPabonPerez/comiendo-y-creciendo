@@ -142,3 +142,80 @@
     color: var(--color-foreground);
   }
 }
+
+/* =====================================================
+   Animaciones personajes
+===================================================== */
+
+@keyframes bigotesMove {
+
+    0%{
+        transform:translateX(0px) rotate(-2deg) scale(1);
+    }
+
+    25%{
+        transform:translateX(-6px) rotate(-4deg) scale(1.02);
+    }
+
+    50%{
+        transform:translateX(0px) rotate(0deg) scale(1.04);
+    }
+
+    75%{
+        transform:translateX(6px) rotate(3deg) scale(1.02);
+    }
+
+    100%{
+        transform:translateX(0px) rotate(-2deg) scale(1);
+    }
+
+}
+
+.animate-bigotes{
+
+    animation:bigotesMove 3.8s ease-in-out infinite;
+
+}
+
+
+
+@keyframes sebastianMove{
+
+    0%{
+
+        transform:translateY(0px) rotate(-3deg);
+
+    }
+
+    25%{
+
+        transform:translateY(-10px) rotate(2deg);
+
+    }
+
+    50%{
+
+        transform:translateY(-18px) rotate(0deg);
+
+    }
+
+    75%{
+
+        transform:translateY(-10px) rotate(-2deg);
+
+    }
+
+    100%{
+
+        transform:translateY(0px) rotate(-3deg);
+
+    }
+
+}
+
+.animate-sebastian{
+
+    animation:sebastianMove 2.5s ease-in-out infinite;
+
+}
+
